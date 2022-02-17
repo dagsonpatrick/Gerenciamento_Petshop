@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}
+Listagem de Pet
+{% endblock title %}
+
+{% block content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+                <div class="card-body card-profile">
+                    <h3 class="profile-username text-center">{{pet.nome}}</h3>
+
+                    <p class="text-muted text-center">{{pet.get_categoria_display}}</p>
+
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item">
+                            <b>Data de Nascimento</b> <a class="pull-right">{{pet.nascimento}}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Cor</b> <a class="pull-right">{{pet.get_cor_display}}</a>
+                        </li>
+                    </ul>
+                    <br>
+                    {% if user.cargo == 1 %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="{% url 'cadastrar_consulta' pet.id %}" class="btn btn-primary btn-block">
+                                Cadastrar Consulta
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            <!-- About Me Box -->
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header p-2">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a class="nav-link active" href="#timeline" data-toggle="tab">Histórico</a></li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                    <div class="active tab-pane" id="timeline">
+                        <ul class="timeline timeline-inverse">
+                            <div class="time-label">
+                                <span class="bg-danger">
+                                  {% now "SHORT_DATE_FORMAT" %}
+                                </span>
+                            </div>
+
+                            {% for consulta in consultas %}
+                            <div>
+                                <i class="fa fa-paw bg-blue"></i>
+                                <div class="timeline-item">
+                                    <span class="time"> <i class="fa fa-calendar"></i>
+                                        {{consulta.data}}
+                                    </span>
+                                    <h3 class="timeline-header">
+                                        {{consulta.pet.nome}} realizou nova consulta
+                                    </h3>
+                                    <div class="timeline-body">
+                                        {{consulta.motivo_consulta}}
+                                    </div>
+                                    <div class="timeline-footer">
+                                      <a class="btn btn-primary btn-xs" href="{% url 'listar_consulta_id' consulta.id %}">
+                                        Visualizar consulta
+                                      </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <!-- END timeline item -->
+
+                            <div>
+                                <i class="far fa-clock bg-gray"></i>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
